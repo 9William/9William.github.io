@@ -199,19 +199,21 @@ let scrollLock = false;
 function glide(target) {
   scrollLock = true;
   target.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
-  setTimeout(() => { scrollLock = false; }, 1200);
+  setTimeout(() => { scrollLock = false; }, 1100);
 }
 
 window.addEventListener("wheel", (e) => {
   if (reduced || scrollLock) return;
+  const hero = document.querySelector(".hero-screen");
   const work = document.querySelector("#work");
-  if (!work) return;
-  const heroTop = document.querySelector(".hero-screen").getBoundingClientRect().top;
+  if (!hero || !work) return;
+  const vh = window.innerHeight;
+  const heroTop = hero.getBoundingClientRect().top;
   const workTop = work.getBoundingClientRect().top;
-  if (e.deltaY > 35 && Math.abs(heroTop) < 40) {
+  if (e.deltaY > 25 && heroTop > -vh * 0.4 && workTop > vh * 0.25) {
     glide(work);
-  } else if (e.deltaY < -35 && Math.abs(workTop) < 40) {
-    glide(document.body.firstElementChild);
+  } else if (e.deltaY < -25 && workTop > -vh * 0.25 && workTop < vh * 0.55) {
+    glide(hero);
   }
 }, { passive: true });
 
