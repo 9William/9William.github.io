@@ -33,13 +33,13 @@ body {
   color: var(--txt);
   font-family: var(--font-d);
   overflow-x: hidden;
-  min-height: 100svh;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
 .hero-screen {
   position: relative;
-  height: 100svh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -179,7 +179,7 @@ button.box:hover {
 
 .meta {
   position: absolute;
-  top: 7vh;
+  top: clamp(120px, 15vh, 170px);
   font-family: var(--font-m);
   font-size: 10px;
   letter-spacing: 0.26em;
@@ -531,7 +531,7 @@ button.box:hover {
 .scroll-cue {
   position: absolute;
   left: 50%;
-  bottom: 24px;
+  bottom: 34px;
   transform: translateX(-50%);
   z-index: 10;
   text-align: center;
@@ -545,8 +545,8 @@ button.box:hover {
 .scroll-cue i {
   display: block;
   width: 1px;
-  height: 36px;
-  margin: 10px auto 0;
+  height: 30px;
+  margin: 9px auto 0;
   background: linear-gradient(var(--accent), transparent);
   animation: drop 1.9s ease-in-out infinite;
 }

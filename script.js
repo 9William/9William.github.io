@@ -190,6 +190,31 @@ document.querySelector(".brand")?.addEventListener("click", (e) => {
   window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
 });
 
+document.querySelector(".scroll-cue")?.addEventListener("click", () => {
+  document.querySelector("#work")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+});
+
+let scrollLock = false;
+
+function glide(target) {
+  scrollLock = true;
+  target.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+  setTimeout(() => { scrollLock = false; }, 1200);
+}
+
+window.addEventListener("wheel", (e) => {
+  if (reduced || scrollLock) return;
+  const work = document.querySelector("#work");
+  if (!work) return;
+  const heroTop = document.querySelector(".hero-screen").getBoundingClientRect().top;
+  const workTop = work.getBoundingClientRect().top;
+  if (e.deltaY > 35 && Math.abs(heroTop) < 40) {
+    glide(work);
+  } else if (e.deltaY < -35 && Math.abs(workTop) < 40) {
+    glide(document.body.firstElementChild);
+  }
+}, { passive: true });
+
 if (statusEl) {
   statusEl.style.transition = "opacity .45s ease";
   rotateStatus();
