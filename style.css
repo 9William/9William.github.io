@@ -40,6 +40,7 @@ body {
 .hero-screen {
   position: relative;
   height: 100vh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
 }
@@ -752,4 +753,36 @@ button.box:hover {
   .sec-head {
     margin-bottom: 48px;
   }
+}
+
+@media (max-width: 640px) {
+  .topbar { padding: 12px 14px; }
+  .box { height: 40px; padding: 0 12px; font-size: 10px; letter-spacing: 0.14em; }
+  .lang { display: none; }
+  .clock { gap: 7px; font-size: 10.5px; }
+  .clock #ampm { font-size: 8.5px; }
+
+  .hero { padding: 108px 6vw 64px; gap: 30px; }
+  .meta-tl, .meta-tr { position: absolute; top: 86px; }
+  .meta-tl { left: 6vw; }
+  .meta-tr { right: 6vw; }
+  .head { font-size: clamp(23px, 7.4vw, 30px); letter-spacing: 0.09em; }
+
+  .stage { padding: 18px 0; }
+  .win { width: 100%; }
+  .chrome { padding: 9px 12px; font-size: 8.5px; letter-spacing: 0.12em; }
+  .body { height: 196px; padding: 13px 12px; font-size: 10.5px; line-height: 1.75; }
+  .status { padding: 8px 12px; font-size: 8px; letter-spacing: 0.16em; }
+
+  .botbar { gap: 16px; padding-bottom: 40px; }
+
+  .projects { padding: 84px 6vw 96px; }
+  .sec-head { margin-bottom: 38px; }
+  .sec-note { font-size: 9px; letter-spacing: 0.18em; }
+  .cards { gap: 44px; }
+  .glyph { font-size: 64px; }
+  .info h3 { font-size: 15px; letter-spacing: 0.12em; }
+  .info p { font-size: 13px; }
+
+  .endbar { flex-direction: column; gap: 10px; text-align: center; padding: 22px 6vw 40px; }
 }
