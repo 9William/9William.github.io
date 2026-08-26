@@ -235,58 +235,67 @@ document.querySelector(".brand")?.addEventListener("click", (e) => {
   glideTo(slides[0]);
 });
 
-const fx = document.querySelector(".grid-fx");
-if (fx && !reduced) {
-  const ctx = fx.getContext("2d");
-  const GAP = 64;
-  const RADIUS = 210;
-  let w = 0;
-  let h = 0;
-  let mx = -9999;
-  let my = -9999;
-  let tx = -9999;
-  let ty = -9999;
+const marksLayer = document.querySelector(".marks");
 
-  function sizeFx() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = fx.clientWidth;
-    h = fx.clientHeight;
-    fx.width = w * dpr;
-    fx.height = h * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  sizeFx();
-  window.addEventListener("resize", sizeFx);
+if (marksLayer) {
+  if (reduced || !window.matchMedia("(hover: hover)").matches) {
+    marksLayer.style.display = "none";
+  } else {
+    const GAP = 64;
+    const RADIUS = 230;
+    const marks = [];
+    let gx = window.innerWidth / 2;
+    let gy = window.innerHeight / 3;
+    let gtx = gx;
+    let gty = gy;
 
-  window.addEventListener("pointermove", (e) => {
-    const r = fx.getBoundingClientRect();
-    tx = e.clientX - r.left;
-    ty = e.clientY - r.top;
-  });
-
-  (function drawFx() {
-    requestAnimationFrame(drawFx);
-    if (window.scrollY > window.innerHeight) return;
-    mx += (tx - mx) * 0.12;
-    my += (ty - my) * 0.12;
-    ctx.clearRect(0, 0, w, h);
-    ctx.lineWidth = 1;
-    for (let x = GAP; x < w; x += GAP) {
-      for (let y = GAP; y < h; y += GAP) {
-        const d = Math.hypot(x - mx, y - my);
-        if (d > RADIUS) continue;
-        const a = 1 - d / RADIUS;
-        ctx.strokeStyle = `rgba(224, 164, 88, ${(a * 0.5).toFixed(3)})`;
-        const s = 2 + a * 2.5;
-        ctx.beginPath();
-        ctx.moveTo(x - s, y);
-        ctx.lineTo(x + s, y);
-        ctx.moveTo(x, y - s);
-        ctx.lineTo(x, y + s);
-        ctx.stroke();
+    function buildMarks() {
+      marksLayer.innerHTML = "";
+      marks.length = 0;
+      const cols = Math.ceil(window.innerWidth / GAP) + 1;
+      const rows = Math.ceil(window.innerHeight / GAP) + 1;
+      const frag = document.createDocumentFragment();
+      for (let c = 1; c <= cols; c++) {
+        for (let r = 1; r <= rows; r++) {
+          const el = document.createElement("i");
+          el.className = "mark";
+          el.style.left = `${c * GAP}px`;
+          el.style.top = `${r * GAP}px`;
+          frag.appendChild(el);
+          marks.push({ el, x: c * GAP, y: r * GAP, o: -1 });
+        }
       }
+      marksLayer.appendChild(frag);
     }
-  })();
+    buildMarks();
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(buildMarks, 150);
+    });
+
+    const moveMarks = (e) => {
+      gtx = e.clientX;
+      gty = e.clientY;
+    };
+    window.addEventListener("pointermove", moveMarks);
+    window.addEventListener("mousemove", moveMarks);
+
+    (function loopMarks() {
+      requestAnimationFrame(loopMarks);
+      gx += (gtx - gx) * 0.09;
+      gy += (gty - gy) * 0.09;
+      for (const m of marks) {
+        const d = Math.hypot(m.x - gx, m.y - gy);
+        const o = d < RADIUS ? ((1 - d / RADIUS) * 0.85).toFixed(3) * 1 : 0;
+        if (Math.abs(o - m.o) > 0.02) {
+          m.o = o;
+          m.el.style.opacity = o;
+        }
+      }
+    })();
+  }
 }
 
 if (!reduced && window.matchMedia("(hover: hover)").matches) {

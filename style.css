@@ -1114,11 +1114,42 @@ button.box:hover {
   }
 }
 
-.grid-fx {
-  position: absolute;
+.marks {
+  position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
+  overflow: hidden;
+}
+
+.mark {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  margin: -5px 0 0 -5px;
+  opacity: 0;
+  transition: opacity 0.22s linear;
+}
+
+.mark::before,
+.mark::after {
+  content: "";
+  position: absolute;
+  background: var(--accent);
+}
+
+.mark::before {
+  left: 5px;
+  top: 0;
+  width: 1px;
+  height: 11px;
+}
+
+.mark::after {
+  top: 5px;
+  left: 0;
+  width: 11px;
+  height: 1px;
 }
 
 .ruler-fill {
@@ -1164,3 +1195,50 @@ button.box:hover {
 }
 
 
+
+@property --neon {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+.head {
+  --neon: 1;
+  text-shadow:
+    0 0 12px rgba(255, 255, 255, calc(0.30 * var(--neon))),
+    0 0 38px rgba(255, 255, 255, calc(0.18 * var(--neon))),
+    0 0 85px rgba(255, 244, 230, calc(0.11 * var(--neon)));
+  animation: neon-pulse 6s ease-in-out infinite;
+}
+
+.reveal.head {
+  animation-name: rise, neon-pulse;
+  animation-duration: 0.9s, 6s;
+  animation-timing-function: cubic-bezier(0.2, 0.65, 0.25, 1), ease-in-out;
+  animation-delay: var(--d, 0s), calc(var(--d, 0s) + 1s);
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards, none;
+}
+
+.hero .head-r {
+  animation-delay: -2s;
+}
+
+.sec-head .head {
+  animation-delay: -4s;
+}
+
+@keyframes neon-pulse {
+  0%, 100% { --neon: 1; }
+  50% { --neon: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head,
+  .reveal.head {
+    animation: none;
+    text-shadow:
+      0 0 12px rgba(255, 255, 255, 0.24),
+      0 0 38px rgba(255, 255, 255, 0.14);
+  }
+}
