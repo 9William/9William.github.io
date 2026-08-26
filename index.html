@@ -15,6 +15,8 @@
 
 <div class="hero-screen">
 
+  <canvas class="grid-fx" aria-hidden="true"></canvas>
+
   <header class="topbar reveal" style="--d:.05s">
     <div class="group">
       <a href="#" class="box brand"><span class="accent">GERRY</span>WILLIAM</a>
@@ -68,9 +70,11 @@
 </div>
 
 <section class="projects" id="work">
+
   <div class="sec-inner">
 
     <div class="sec-head fade-item">
+      <span class="wm" aria-hidden="true">05</span>
       <p class="meta"><span>05</span>Selected Work</p>
       <h2 class="head">Things I've<br /><span>built</span></h2>
       <p class="sec-note">personal apps, born from everyday problems</p>
@@ -118,12 +122,99 @@
   </div>
 </section>
 
+<section class="about" id="about">
+  <div class="sec-inner">
+
+    <div class="sec-head fade-item">
+      <span class="wm" aria-hidden="true">06</span>
+      <p class="meta"><span>06</span>About</p>
+      <h2 class="head">Behind the<br /><span>screen</span></h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="bio fade-item" style="--d:.1s">
+        <p class="lead">Full-stack developer from Jakarta. Two years of keeping a bank's core systems alive &mdash; and a habit of building apps for everyday life.</p>
+        <p>By day I work on the Finastra BankFusion core banking platform &mdash; Java, Spring Boot, Oracle SQL &mdash; tracing production issues to the root and shipping features used at scale. Off the clock I build my own products: MealPick, ShopTrack and PayTrack, born from real problems and shipped with React Native.</p>
+        <p>The stack I reach for when it's my project: React, Next.js and Python. Currently chipping away at Go.</p>
+        <div class="chip-row"><span class="chip-k">main</span><span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">Oracle SQL</span></div>
+        <div class="chip-row"><span class="chip-k">also</span><span class="chip">React Native</span><span class="chip">React</span><span class="chip">Next.js</span><span class="chip">Python</span><span class="chip">PostgreSQL</span></div>
+        <div class="chip-row"><span class="chip-k">learning</span><span class="chip">Go</span></div>
+        <div class="chip-row"><span class="chip-k">tools</span><span class="chip">Git</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">REST APIs</span></div>
+      </div>
+
+      <div class="stack-panel fade-item" style="--d:.2s">
+        <div class="chrome">
+          <span class="path">~/folio/stack.sh</span>
+          <span class="tag">proficiency</span>
+        </div>
+        <div class="bars">
+          <div class="brow" style="--w:85%;--i:0"><span class="bname">java &middot; spring boot</span><span class="btrack"><i></i></span><span class="bnote">main</span></div>
+          <div class="brow" style="--w:75%;--i:1"><span class="bname">oracle sql</span><span class="btrack"><i></i></span><span class="bnote">main</span></div>
+          <div class="brow" style="--w:75%;--i:2"><span class="bname">react &middot; next.js</span><span class="btrack"><i></i></span><span class="bnote">also</span></div>
+          <div class="brow" style="--w:70%;--i:3"><span class="bname">react native</span><span class="btrack"><i></i></span><span class="bnote">shipped x3</span></div>
+          <div class="brow" style="--w:65%;--i:4"><span class="bname">python</span><span class="btrack"><i></i></span><span class="bnote">also</span></div>
+          <div class="brow" style="--w:60%;--i:5"><span class="bname">postgresql</span><span class="btrack"><i></i></span><span class="bnote">apps</span></div>
+          <div class="brow" style="--w:35%;--i:6"><span class="bname">go</span><span class="btrack"><i></i></span><span class="bnote">learning</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="xp" id="experience">
+  <div class="sec-inner">
+
+    <div class="sec-head fade-item">
+      <span class="wm" aria-hidden="true">07</span>
+      <p class="meta"><span>07</span>Experience</p>
+      <h2 class="head">Where I've<br /><span>worked</span></h2>
+    </div>
+
+    <div class="xp-list">
+      <article class="xp-item fade-item">
+        <span class="xp-idx">07.01</span>
+        <div class="xp-main">
+          <h3>Java Developer <em>&mdash; LG Sinarmas / KB Bank Indonesia</em></h3>
+          <p class="xp-sub">IT Maintenance &amp; Development &middot; Finastra BankFusion core banking</p>
+          <ul>
+            <li>Maintain and enhance production core-banking services on Java Spring Boot + Oracle SQL</li>
+            <li>Rebuilt Bulk Transfer APIs and batching logic for high-volume, unstable-data processing</li>
+            <li>Delivered the Guarantee Online PLN feature and technical docs for cross-team use</li>
+          </ul>
+        </div>
+        <div class="xp-meta">
+          <span class="xp-time">12 / 2024 &mdash; now</span>
+          <span class="xp-loc">Jakarta</span>
+        </div>
+      </article>
+
+      <article class="xp-item fade-item" style="--d:.12s">
+        <span class="xp-idx">07.02</span>
+        <div class="xp-main">
+          <h3>Bachelor Degree <em>&mdash; Telkom University</em></h3>
+          <p class="xp-sub">Computer Science &middot; Software Engineering Major</p>
+          <ul>
+            <li>Graduated 2024, focused on software engineering fundamentals</li>
+            <li>Started building personal apps that later became MealPick, ShopTrack &amp; PayTrack</li>
+          </ul>
+        </div>
+        <div class="xp-meta">
+          <span class="xp-time">2020 &mdash; 2024</span>
+          <span class="xp-loc">Bandung</span>
+        </div>
+      </article>
+    </div>
+
+  </div>
+</section>
+
 <footer class="endbar">
   <p>&copy; 2026 Gerry William &mdash; Jakarta</p>
   <a class="end-link" href="mailto:9williamm@gmail.com">9williamm@gmail.com</a>
 </footer>
 
-<div class="ruler" aria-hidden="true"></div>
+<div class="ruler" aria-hidden="true"><i class="ruler-fill"></i></div>
 <div class="noise" aria-hidden="true"></div>
 
 <script src="script.js"></script>

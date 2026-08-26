@@ -181,41 +181,158 @@ document.querySelectorAll(".fade-item").forEach((el) => {
   else io.observe(el);
 });
 
-document.querySelector(".menu")?.addEventListener("click", () => {
-  document.querySelector("#work")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
-});
-
-document.querySelector(".brand")?.addEventListener("click", (e) => {
-  e.preventDefault();
-  window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
-});
-
-document.querySelector(".scroll-cue")?.addEventListener("click", () => {
-  document.querySelector("#work")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
-});
-
 let scrollLock = false;
+let lastWheel = 0;
 
-function glide(target) {
+const slides = [".hero-screen", "#work", "#about", "#experience"]
+  .map((sel) => document.querySelector(sel))
+  .filter(Boolean);
+
+function nearestSlide() {
+  const mid = window.scrollY + window.innerHeight / 2;
+  let best = 0;
+  let dist = Infinity;
+  slides.forEach((el, i) => {
+    const center = el.offsetTop + el.offsetHeight / 2;
+    const d = Math.abs(center - mid);
+    if (d < dist) {
+      dist = d;
+      best = i;
+    }
+  });
+  return best;
+}
+
+function glideTo(el) {
   scrollLock = true;
-  target.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
-  setTimeout(() => { scrollLock = false; }, 1100);
+  el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+  setTimeout(() => { scrollLock = false; }, 900);
 }
 
 window.addEventListener("wheel", (e) => {
-  if (reduced || scrollLock) return;
-  const hero = document.querySelector(".hero-screen");
-  const work = document.querySelector("#work");
-  if (!hero || !work) return;
+  if (reduced || scrollLock || slides.length < 2) return;
+  const now = Date.now();
+  const fresh = now - lastWheel > 300;
+  lastWheel = now;
+  if (!fresh || Math.abs(e.deltaY) < 25) return;
+  const idx = nearestSlide();
+  const cur = slides[idx];
+  const r = cur.getBoundingClientRect();
   const vh = window.innerHeight;
-  const heroTop = hero.getBoundingClientRect().top;
-  const workTop = work.getBoundingClientRect().top;
-  if (e.deltaY > 25 && heroTop > -vh * 0.4 && workTop > vh * 0.25) {
-    glide(work);
-  } else if (e.deltaY < -25 && workTop > -vh * 0.25 && workTop < vh * 0.55) {
-    glide(hero);
+  if (e.deltaY > 0) {
+    if (r.bottom > vh + 60) return;
+    if (slides[idx + 1]) glideTo(slides[idx + 1]);
+  } else {
+    if (r.top < -60) return;
+    if (slides[idx - 1]) glideTo(slides[idx - 1]);
   }
 }, { passive: true });
+
+document.querySelector(".scroll-cue")?.addEventListener("click", () => glideTo(slides[1]));
+document.querySelector(".menu")?.addEventListener("click", () => glideTo(slides[1]));
+document.querySelector(".brand")?.addEventListener("click", (e) => {
+  e.preventDefault();
+  glideTo(slides[0]);
+});
+
+const fx = document.querySelector(".grid-fx");
+if (fx && !reduced) {
+  const ctx = fx.getContext("2d");
+  const GAP = 64;
+  const RADIUS = 210;
+  let w = 0;
+  let h = 0;
+  let mx = -9999;
+  let my = -9999;
+  let tx = -9999;
+  let ty = -9999;
+
+  function sizeFx() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = fx.clientWidth;
+    h = fx.clientHeight;
+    fx.width = w * dpr;
+    fx.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  sizeFx();
+  window.addEventListener("resize", sizeFx);
+
+  window.addEventListener("pointermove", (e) => {
+    const r = fx.getBoundingClientRect();
+    tx = e.clientX - r.left;
+    ty = e.clientY - r.top;
+  });
+
+  (function drawFx() {
+    requestAnimationFrame(drawFx);
+    if (window.scrollY > window.innerHeight) return;
+    mx += (tx - mx) * 0.12;
+    my += (ty - my) * 0.12;
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineWidth = 1;
+    for (let x = GAP; x < w; x += GAP) {
+      for (let y = GAP; y < h; y += GAP) {
+        const d = Math.hypot(x - mx, y - my);
+        if (d > RADIUS) continue;
+        const a = 1 - d / RADIUS;
+        ctx.strokeStyle = `rgba(224, 164, 88, ${(a * 0.5).toFixed(3)})`;
+        const s = 2 + a * 2.5;
+        ctx.beginPath();
+        ctx.moveTo(x - s, y);
+        ctx.lineTo(x + s, y);
+        ctx.moveTo(x, y - s);
+        ctx.lineTo(x, y + s);
+        ctx.stroke();
+      }
+    }
+  })();
+}
+
+if (!reduced && window.matchMedia("(hover: hover)").matches) {
+  document.querySelectorAll(".card").forEach((card) => {
+    const thumb = card.querySelector(".thumb");
+    if (!thumb) return;
+    card.addEventListener("pointermove", (e) => {
+      const r = thumb.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      thumb.style.transition = "transform .12s ease-out";
+      thumb.style.transform = `rotateX(${((0.5 - py) * 8).toFixed(2)}deg) rotateY(${((px - 0.5) * 10).toFixed(2)}deg) translateY(-4px)`;
+      thumb.style.setProperty("--gx", `${(px * 100).toFixed(1)}%`);
+      thumb.style.setProperty("--gy", `${(py * 100).toFixed(1)}%`);
+    });
+    card.addEventListener("pointerleave", () => {
+      thumb.style.transition = "transform .55s cubic-bezier(.2,.7,.3,1)";
+      thumb.style.transform = "";
+    });
+  });
+}
+
+const fill = document.querySelector(".ruler-fill");
+const wms = Array.from(document.querySelectorAll(".wm"));
+let scrollTick = false;
+
+function onScrollFx() {
+  if (scrollTick) return;
+  scrollTick = true;
+  requestAnimationFrame(() => {
+    scrollTick = false;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (fill) fill.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+    if (!reduced) {
+      const vh = window.innerHeight;
+      wms.forEach((wm) => {
+        const r = wm.parentElement.getBoundingClientRect();
+        const off = r.top + r.height / 2 - vh / 2;
+        wm.style.transform = `translateY(${(off * -0.06).toFixed(1)}px)`;
+      });
+    }
+  });
+}
+
+window.addEventListener("scroll", onScrollFx, { passive: true });
+onScrollFx();
 
 if (statusEl) {
   statusEl.style.transition = "opacity .45s ease";
