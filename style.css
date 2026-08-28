@@ -660,6 +660,21 @@ button.box:hover {
   }
 }
 
+.thumb-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 46%;
+  height: 46%;
+  object-fit: contain;
+  filter: grayscale(0.85) brightness(0.55) contrast(1.05);
+  transition: filter 0.35s ease;
+}
+
+.card:hover .thumb-icon {
+  filter: grayscale(0.05) brightness(0.95) saturate(1.15);
+}
+
 .ph {
   position: absolute;
   right: 12px;
