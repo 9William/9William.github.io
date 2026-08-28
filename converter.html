@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#141414" />
+  <title>PixelForge &middot; Image Converter</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23141414'/%3E%3Crect x='4' y='4' width='8' height='8' fill='%23e0a458'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="converter.css" />
+</head>
+<body>
+
+  <div class="forge-screen">
+
+    <header class="forge-header">
+      <div class="forge-brand"><span class="accent">GERRY</span>WILLIAM</div>
+      <div class="forge-title">PixelForge &middot; Alpha</div>
+    </header>
+
+    <main class="forge-main">
+
+      <section class="forge-intro" aria-label="intro">
+        <p class="forge-meta"><span>01</span>Local-First Image Converter</p>
+        <h1 class="forge-head"><span>Pixel</span>Forge</h1>
+        <p class="forge-sub">Drop an image to convert its format. Completely local &mdash; nothing leaves your browser.</p>
+      </section>
+
+      <section class="forge-stage" aria-label="converter">
+        <div class="forge-win">
+          <div class="forge-chrome">
+            <span class="forge-path" id="forgeFile">~/pixelforge/convert</span>
+            <span class="forge-tag">alpha</span>
+          </div>
+
+          <div class="forge-body">
+
+            <div class="dropzone" id="dropzone" tabindex="0">
+              <div class="dz-inner">
+                <i class="dz-icon" aria-hidden="true"></i>
+                <p class="dz-text">Drop image here or click to browse</p>
+                <p class="dz-note">PNG, JPG, WebP, GIF, BMP &mdash; max 50MB</p>
+                <input type="file" id="fileInput" accept="image/*" hidden />
+              </div>
+            </div>
+
+            <div class="controls" aria-label="controls">
+              <div class="ctrl-row">
+                <label class="ctrl-label">Output Format</label>
+                <div class="format-picker" id="formatPicker">
+                  <button class="fmt-option" data-fmt="image/png" data-name="PNG">PNG</button>
+                  <button class="fmt-option" data-fmt="image/jpeg" data-name="JPG">JPG</button>
+                  <button class="fmt-option" data-fmt="image/webp" data-name="WebP">WebP</button>
+                </div>
+              </div>
+
+              <div class="ctrl-row">
+                <label class="ctrl-label">Quality</label>
+                <div class="quality-bar">
+                  <input type="range" id="quality" min="50" max="100" value="85" />
+                  <span class="quality-val" id="qualityVal">85%</span>
+                </div>
+              </div>
+
+              <div class="ctrl-row">
+                <label class="ctrl-label">Preview</label>
+                <div class="preview" id="preview">
+                  <span class="ph">no image loaded</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="forge-status">
+              <span class="forge-pulse" id="forgePulse"></span>
+              <span id="forgeStatus">ready</span>
+            </div>
+          </div>
+
+          <div class="forge-actions">
+            <button class="forge-btn" id="downloadBtn" disabled>
+              <span id="downloadLabel">Download converted</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="forge-footer">
+      <p>PixelForge v0.1 &alpha; &mdash; your files never leave this browser. Built with Canvas API.</p>
+      <p><a href="index.html#work" class="forge-link">&larr; back to folio</a></p>
+    </footer>
+  </div>
+
+  <div class="forge-marks" aria-hidden="true"></div>
+  <div class="forge-noise" aria-hidden="true"></div>
+
+  <script src="converter.js"></script>
+</body>
+</html>
