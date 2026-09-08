@@ -210,23 +210,19 @@ function glideTo(el) {
 }
 
 window.addEventListener("wheel", (e) => {
-  if (reduced || scrollLock || slides.length < 2) return;
+  if (reduced || slides.length < 2) return;
+  if (Math.abs(e.deltaY) < 10) return;
   const now = Date.now();
-  const fresh = now - lastWheel > 300;
-  lastWheel = now;
-  if (!fresh || Math.abs(e.deltaY) < 25) return;
+  if (now - lastWheel < 650) { e.preventDefault(); return; }
+  if (scrollLock) { e.preventDefault(); return; }
+  e.preventDefault();
+  const dir = e.deltaY > 0 ? 1 : -1;
   const idx = nearestSlide();
-  const cur = slides[idx];
-  const r = cur.getBoundingClientRect();
-  const vh = window.innerHeight;
-  if (e.deltaY > 0) {
-    if (r.bottom > vh + 60) return;
-    if (slides[idx + 1]) glideTo(slides[idx + 1]);
-  } else {
-    if (r.top < -60) return;
-    if (slides[idx - 1]) glideTo(slides[idx - 1]);
-  }
-}, { passive: true });
+  const target = idx + dir;
+  if (target < 0 || target >= slides.length) return;
+  lastWheel = now;
+  glideTo(slides[target]);
+}, { passive: false });
 
 document.querySelector(".scroll-cue")?.addEventListener("click", () => glideTo(slides[1]));
 document.querySelector(".menu")?.addEventListener("click", () => glideTo(slides[1]));
